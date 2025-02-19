@@ -1,5 +1,7 @@
+// File: app/src/main/java/com/example/lab_3/MainActivity.kt
 package com.example.lab_3
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,10 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import com.example.lab_3.ui.theme.Lab_3Theme
 
 class MainActivity : ComponentActivity() {
@@ -29,9 +33,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun GetLayout(innerPadding: PaddingValues? = PaddingValues(0.dp)) {
+    val context = LocalContext.current // Lấy context từ Composable
+
     var a by remember { mutableStateOf("") }
     var b by remember { mutableStateOf("") }
     var c by remember { mutableStateOf("") }
@@ -51,7 +58,6 @@ fun GetLayout(innerPadding: PaddingValues? = PaddingValues(0.dp)) {
             modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
         )
 
-        // Ô nhập giá trị a
         TextField(
             value = a,
             onValueChange = { a = it },
@@ -59,7 +65,6 @@ fun GetLayout(innerPadding: PaddingValues? = PaddingValues(0.dp)) {
             modifier = Modifier.padding(16.dp)
         )
 
-        // Ô nhập giá trị b
         TextField(
             value = b,
             onValueChange = { b = it },
@@ -67,7 +72,6 @@ fun GetLayout(innerPadding: PaddingValues? = PaddingValues(0.dp)) {
             modifier = Modifier.padding(16.dp)
         )
 
-        // Ô nhập giá trị c
         TextField(
             value = c,
             onValueChange = { c = it },
@@ -75,10 +79,8 @@ fun GetLayout(innerPadding: PaddingValues? = PaddingValues(0.dp)) {
             modifier = Modifier.padding(16.dp)
         )
 
-        // Hiển thị kết quả
         GetTextTitle(result)
 
-        // Nút tính toán
         Button(
             onClick = {
                 result = try {
@@ -94,8 +96,20 @@ fun GetLayout(innerPadding: PaddingValues? = PaddingValues(0.dp)) {
         ) {
             Text(text = "Tính")
         }
+
+        // Nút chuyển sang SecondActivity
+        Button(
+            onClick = {
+                val intent = Intent(context, SecondActivity::class.java)
+                context.startActivity(intent)
+            },
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = "Chuyển sang SecondActivity")
+        }
     }
 }
+
 
 // Hàm tính toán phương trình bậc 2
 fun tinhtoan(a: Float, b: Float, c: Float): String {
